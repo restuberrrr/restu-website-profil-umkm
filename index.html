@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profil UMKM Kopi & Roti</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <nav><strong>Kopi & Roti Nusukan</strong><a href="#admin">Kelola Produk</a></nav>
+      <div>
+        <p>Company Profile UMKM</p>
+        <h1>Katalog produk sederhana dengan panel CRUD.</h1>
+        <a class="cta" href="https://wa.me/6289618853388">Pesan via WhatsApp</a>
+      </div>
+    </header>
+    <main>
+      <section>
+        <h2>Katalog Produk</h2>
+        <div class="catalog" id="catalog"></div>
+      </section>
+      <section id="admin" class="admin">
+        <h2>Kelola Produk</h2>
+        <form id="form">
+          <input type="hidden" id="id" />
+          <input id="name" required placeholder="Nama produk" />
+          <input id="category" required placeholder="Kategori" />
+          <input id="price" required type="number" min="0" placeholder="Harga" />
+          <textarea id="description" required placeholder="Deskripsi"></textarea>
+          <button>Simpan Produk</button>
+          <button type="button" class="ghost" id="reset">Reset</button>
+        </form>
+      </section>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
+
