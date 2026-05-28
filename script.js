@@ -1,4 +1,6 @@
-const api = 'api.php';
+import { supabaseRequest } from './supabase.js';
+
+const table = 'portfolio_umkm_products';
 const ids = ['id', 'name', 'category', 'price', 'description'];
 const el = Object.fromEntries(ids.map((id) => [id, document.querySelector(`#${id}`)]));
 let products = [];
@@ -6,7 +8,7 @@ let products = [];
 const money = (value) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(value);
 
 async function load() {
-  products = await (await fetch(api)).json();
+  products = await supabaseRequest(table);
   render();
 }
 
@@ -24,10 +26,11 @@ function render() {
 document.querySelector('#form').addEventListener('submit', async (event) => {
   event.preventDefault();
   const payload = Object.fromEntries(ids.filter((id) => id !== 'id').map((id) => [id, el[id].value]));
-  await fetch(el.id.value ? `${api}?id=${el.id.value}` : api, {
-    method: el.id.value ? 'PUT' : 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
+  payload.price = Number(payload.price);
+  await supabaseRequest(table, {
+    method: el.id.value ? 'PATCH' : 'POST',
+    id: el.id.value || undefined,
+    body: payload,
   });
   event.target.reset();
   el.id.value = '';
@@ -42,9 +45,9 @@ document.querySelector('#reset').addEventListener('click', () => {
 document.querySelector('#catalog').addEventListener('click', async (event) => {
   const button = event.target.closest('button');
   if (!button) return;
-  const product = products.find((item) => item.id === button.dataset.id);
+  const product = products.find((item) => String(item.id) === button.dataset.id);
   if (button.dataset.action === 'delete') {
-    await fetch(`${api}?id=${button.dataset.id}`, { method: 'DELETE' });
+    await supabaseRequest(table, { method: 'DELETE', id: button.dataset.id });
     load();
   }
   if (button.dataset.action === 'edit' && product) {
@@ -54,4 +57,3 @@ document.querySelector('#catalog').addEventListener('click', async (event) => {
 });
 
 load();
-
